@@ -14,11 +14,38 @@
 
 ### Program:
 ### Create employee table
-
+```create table employeee(empid number,empname varchar (10), dept varchar (10) ,salary number);```
 ### Create salary_log table
-
+```create table salary_log(log_id number,empid NUMBER,empname VARCHAR(10),old_salary NUMBER,new_salary NUMBER,update_date DATE);```
 ### PLSQL Trigger code
-
+```
+CREATE OR REPLACE TRIGGER log_salary_update
+BEFORE UPDATE ON employee
+FOR EACH ROW
+DECLARE
+	v_old_salary NUMBER;
+	v_new_salary NUMBER;
+BEGIN
+	v_old_salary := :OLD.salary;
+	v_new_salary := :NEW.salary;
+	IF v_old_salary <> v_new_salary THEN
+		INSERT INTO salary_log (empid,empname,old_salary,new_salary,update_date)
+		VALUES(:OLD.empid, :OLD.empname,v_old_salary,v_new_salary, SYSDATE);
+	END IF;	
+END;
+/
+```
+### UPDATE VALUES IN EMPLOYEE TABLE
+```
+UPDATE employee set salary = 65000 where empid = 2;
+SELECT * FROM SALARY_LOG;
+SELECT * FROM EMPLOYEE;
+```
 ### Output:
 
+![trigger](https://github.com/NIXANDASS/Ex-No-5-Creating-Triggers-using-PL-SQL/assets/118781418/e7d846c2-2284-4523-96e8-dda17cb44f62)
+![trigger_](https://github.com/NIXANDASS/Ex-No-5-Creating-Triggers-using-PL-SQL/assets/118781418/b0155c9d-a06d-4045-95d8-ee2913a5ab49)
+![trigger_3](https://github.com/NIXANDASS/Ex-No-5-Creating-Triggers-using-PL-SQL/assets/118781418/c6e87baa-df4d-4679-bb26-771680c318c5)
+
 ### Result:
+THE PROGRAM FOR TRIGGER WAS CREATED AND EXECUTED SUCCESSFULLY.
